@@ -60,7 +60,7 @@ Below the zero points derived for 56 systems in the 2MASS Ks are plotted versus 
 Full example
 ------------
 
-Using the ivs python repository, we can derive zero points and the correlation between color and zero point using spectra from fx. CALSPEC. We assume that we have a file in which we list all systems together with the path to the spectrum, and the path to the phtometry file.
+Using the ivs python repository, we can derive zero points and the correlation between color and zero point using spectra from fx. CALSPEC. We assume that we have a file in which we list all systems together with the path to the spectrum, and the path to the photometry file. The basics of the code is given below, and a more detailed script can be obtained: :download:`scripts/calculate_zeropoints.py`.
 
 Necessary imports:
 
@@ -161,106 +161,31 @@ Now run over all systems, for each get the synthetic and observed magnitudes and
    dtype = [(pb.split('.')[-1] , 'f8') for pb in photbands] + [('e_'+pb.split('.')[-1] , 'f8') for pb in photbands]
    observed = np.array(observed, dtype=dtype)
    
-We have the synthetic and observed magnitudes, so now we can easily derive the zero points.
+We have the synthetic and observed magnitudes, so now we can easily derive the zero points, and plot them against color
 
 .. code-block:: python
 
-   def fit_zp(ax, band, c1, c2):
-      """
-      Get the zeropoint and plot the results
-      """
-      
-      def mc(color, syn, obs, err):
-         #-- Use MC simulation to get zero points and error
-         zp, slope = [], []
-         for i in range(1024):
-            #-- add normal noise comparable with error
-            obs_ = err * np.random.normal(len(obs)) + obs
-            
-            #-- calculate zp
-            zp.append( np.average( syn - obs_ , weights=1./err ) )
-            
-            #-- calculate the slope
-            coef = np.polyfit(color, syn - obs_, 1, w=1./err)
-            slope.append(coef[0])
-         
-         #-- error and exact value for zp
-         e_zp = np.std(zp)
-         zp = np.average( syn - obs , weights=1./err )
-         
-         #-- error and exact value for slope
-         coef = np.polyfit(color, syn - obs , 1, w=1./err)
-         e_slope = np.std(slope)
-         slope = coef[0]
-         
-         return zp, e_zp, slope, e_slope
-      
-      #-- Get the zero point and slope
-      color = synthetic[c1]-synthetic[c2]
-      
-      syn = synthetic[band]
-      obs = observed[band]
-      err = observed['e_'+band]
-      #err = 0.02*np.ones_like(syn)
-      
-      zp, e_zp, slope, e_slope = mc(color, syn, obs, err)
-      
-      #-- remove all points that have zero points above 3 sigma from the average
-      #   and recalculate zero point and slope without outliers
-      s = np.where(abs(syn - obs - zp) < s_reject*e_zp)
-      
-      color, syn, obs, err = color[s], syn[s], obs[s], err[s]
-      
-      zp, e_zp, slope, e_slope = mc(color, syn, obs, err)
-      
-      
-      #-- get the linear fit for plotting
-      coef = np.polyfit(color, syn - obs , 1, w=1./err)
-      
-      x = pl.linspace(np.min(color), np.max(color))
-      y = np.polyval(coef, x)
-      y1 = np.polyval([slope-e_slope, coef[1]], x)
-      y2 = np.polyval([slope+e_slope, coef[1]], x)
-      
-      #-- plot
-      pl.errorbar(color, 
-                  syn-obs, 
-                  yerr=err, ls='', marker='o')
-      
-      pl.plot(x, y, '-r')
-      pl.plot(x, y1, '--r')
-      pl.plot(x, y2, '--r')
-      
-      pl.axhline(y=zp, color='k', ls='--')
-      
-      
-      pl.text(0.02, 0.98, "slope = {:0.2f} +- {:0.2f}".format(slope, e_slope),
-            va='top', color='r', transform=ax.transAxes)
-      
-      #pl.text(0.98, 0.98, "Average = {:0.3f} +- {:0.3f}".format(zp, e_zp), 
-            #va='top', ha='right', color='k', transform=ax.transAxes)
-      
-      pl.text(0.02, 0.02, "accepted = {:0.0f}   rejected = {:0.0f}".format(len(syn), 
-                                                            len(synthetic) - len(syn) ),
-            color='r', transform=ax.transAxes)
-      
-      pl.xlabel(c1+' - '+c2)
-      pl.ylabel('syn - obs')
-      pl.title("{} : Zp = {:0.3f} +- {:0.3f}".format(band, zp, e_zp))
-      
-   pl.figure(1)
-   ax = pl.subplot(1, 2, 1)
-   fit_zp(ax, 'B', 'B', 'V')
-   ax = pl.subplot(1, 2, 2)
-   fit_zp(ax, 'v', 'B', 'V')
+   zp_B = np.average(synthetic['B'] - observed['B'])
+   zp_V = np.average(synthetic['V'] - observed['V'])
    
-   pl.figure(2)
-   ax = pl.subplot(1, 3, 1)
-   fit_zp(ax, 'G', 'G', 'I')
-   ax = pl.subplot(1, 3, 2)
-   fit_zp(ax, 'R', 'G', 'I')
-   ax = pl.subplot(1, 3, 3)
-   fit_zp(ax, 'I', 'G', 'I')
+   color = observed['B'] - observed['V']
+   
+   pl.figure(1, figsize=(12, 5))
+   pl.subplot(121)
+   pl.errorbar(color, synthetic['B'] - observed['B'], yerr=observed['e_B'], marker='o', ls='')
+   pl.xlabel('B - V')
+   pl.ylabel('B_syn - B_obs (mag)')
+   pl.title('ZP = {}'.format(zp_B))
+   
+   pl.subplot(122)
+   pl.errorbar(color, synthetic['V'] - observed['V'], yerr=observed['e_V'], marker='o', ls='')
+   pl.xlabel('B - V')
+   pl.ylabel('V_syn - V_obs (mag)')
+   pl.title('ZP = {}'.format(zp_V))
+   
    pl.show()
    
-Which produced these figures:
+Which produced this figure:
+
+.. image:: images/zero_point_APASS_BV.png
+   :width: 70em
