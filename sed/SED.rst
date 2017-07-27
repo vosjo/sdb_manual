@@ -6,4 +6,5 @@ Spectral Energy Distribution (SED)
    :maxdepth: 2
    :caption: Contents:
    
+   filters
    zeropoint_derivation
