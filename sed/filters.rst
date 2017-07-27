@@ -18,73 +18,37 @@ To print a list of all available systems:
       print temp.format(system, *bands)
 
 
-============  =======
-system        filters
-============  =======
-      TYCHO2  BT VT
-       AKARI  L15 L18W L24 N160 N2 N3 N4 N60 S11 S7 S9W WIDEL WIDES
-        OAO2  133 143 155 168 191 203 238 246 294 298 332 425
-       SPIRE  250 350 500
-   HIPPARCOS  HP
-   STROMGREN  B U V Y B HBN HBW
-       SLOAN  I R
-        MIPS  160 24 70
-        GAIA  BP G RP RVS
-       ARGUE  R R8 R9
-       SCUBA  350NB 450NB 450WB 750NB 850NB 850WB
-       ESOIR  BRG CO H0 K0 L0 N N1 N2 N3 Q0
-      ACSWFC  F435W F475W F502N F550M F555W F606W F625W F658N F660N F775W F814W F850LP
-      USNOB1  B1 R1
-     JOHNSON  I R U V 110 33 35 37 40 45 52 58 58P 63 72 80 86 99 B H I J K L M N R U V
-       APASS  B G I R V
-        APEX  LABOCA
-         MSX  A B1 B2 C D E
-     STISCCD  50CCD F28X50LP
-    STEBBINS  B G I R U V
-        WOOD  A B G H I O R T1 T2 U V Y
-     LANDOLT  B2 B3 I R U V
-        IRAC  36 45 58 80
-        MAIA  GA GEO REO UA UEO
-         TD1  1565 1965 2365 2740
-      BESSEL  H J K L LPRIME M B BW I R U V
-       VISIR  ARIII NEII NEII1 NEII2 PAH1 PAH2 PAH22 Q1 Q2 Q3 SIC SIV SIV1
-       2MASS  H J KS
-       WFCAM  H J K Y Z
-       TYCHO  BT VT BT VT
-      GENEVA  B B1 B2 G U V V1 B B1 B2 G U V V1
-        KRON  I R
-     COUSINS  I R V
-     BALLOON  UV
-        MOST  V
-    WALRAVEN  B L U V W
-CAMELOT-SDSS  G I R U Z
-         DDO  35 38 41 42 45 48 51
-       PLAVI  NIR SWIR VIS
-      NICMOS  F110W F160W F187W F190N F205W F222M
-        IRAS  F100 F12 F25 F60
-    ULTRACAM  GP IP RP UP ZP
-  SUPRIMECAM  B GP IC IP NB711 NB816 NB921 RC RP V ZP
-       BRITE  B R
-       GALEX  FUV NUV
-        SDSS  G I R U Z G GP I IP R RP U UP Z ZP
-        WISE  W1 W2 W3 W4
-     BESSELL  B BW I R U V
-        UVEX  G HA I R U
-        PACS  B G R
-        SAAO  35 38 41 42 45 48 H J K L M N Q
-     CAMELOT  GAMMA I R U V G I R U Z B U V Y IZ1 IZ2
-       DENIS  I J KS
-     GENEVA2  B B1 B2 G U V V1
-         ANS  15N 15W 18 22 25 33
-       IPHAS  HA IP RP
-     EEV4280  CCD
-      NARROW  HA
-       COROT  EXO SIS
-     VILNIUS  P S U V X Y Z
-  CAMELOT-BR  GAMMA
-       DIRBE  F100 F12 F140 F1_25 F240 F25 F2_2 F3_5 F4_9 F60
-============  =======
+Transmission curves of some of the most commonly used systems plotted over a spectrum of an sdB+F type binary. The code to make these plots: :download:`scripts/plot_response_curves.py`.
 
+APASS 
+^^^^^
+   
+.. image:: images/filters_apass.png
+   :width: 60em
+
+JOHNSON 
+^^^^^^^
+   
+.. image:: images/filters_johnson.png
+   :width: 60em
+
+SDSS 
+^^^^
+   
+.. image:: images/filters_sdss.png
+   :width: 60em
+   
+STROMGREN
+^^^^^^^^^
+   
+.. image:: images/filters_stromgren.png
+   :width: 60em   
+
+2MASS
+^^^^^
+   
+.. image:: images/filters_2mass.png
+   :width: 60em 
 
 Defining a new filter
 ---------------------
