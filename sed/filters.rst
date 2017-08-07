@@ -2,6 +2,7 @@
 Photometric passbands 
 =====================
 
+The photometric pass bands a.k.a. filters are kept in ivs/sed/filters. Functions to work with them are included in the sed.filters module of the ivs repository. A whole load of known filters are included by default, and if neccessary new filters can be added temporarily on the fly, or permanently by adding the transmission curves and hard coding the necessary information in the zeropoints file.
 
 Available response functions
 ----------------------------
@@ -9,8 +10,10 @@ Available response functions
 To print a list of all available systems:
 
 .. code-block:: python
+
+   from ivs.sed import filters
    
-   responses = list_response()
+   responses = filters.list_response()
    systems = set([response.split('.')[0] for response in responses])
    for system in systems:
       bands = [band.split('.')[-1] for band in filters.list_response(name=system)]
@@ -18,6 +21,12 @@ To print a list of all available systems:
       print temp.format(system, *bands)
 
 
+Obtaining the response curve of a specific filter, fx. the 2MASS J filter, can be done with:
+
+.. code-block:: python
+
+   wave, transmission = filters.get_response('2MASS.J')
+      
 Transmission curves of some of the most commonly used systems plotted over a spectrum of an sdB+F type binary. The code to make these plots: :download:`scripts/plot_response_curves.py`.
 
 APASS 
@@ -49,9 +58,47 @@ STROMGREN
    
 .. image:: images/filters_2mass.png
    :width: 60em 
+   
+The zeropoints file
+-------------------
 
-Defining a new filter
----------------------
+All necessary information to convert magnitudes to fluxes and vice versa for the filters is stored in the ivs/sed/zeropoints.dat file. This file contains for each filter the following information:
+  
+* eff_wave (float): effective wavelength
+* type (str): What type the detector is, CCD or BOL (Bolometer)
+* vegamag (float): zeropoint in the Vega system
+* vegamag_lit (int): flag to indicate if the vegamag is taken from literature
+* ABmag (float): zeropoint in the AB system
+* ABmag_lit (int): flag to indicate if the ABmag is taken from literature
+* STmag (float): zeropoint in the ST system
+* STmag_lit (int): flag to indicate if the STmag is taken from literature
+* Flam0 (float): Reference flux in :math:`F_{\lambda}` units
+* Flam0_units (str): units of the reference flux
+* Flam0_lit (int): flag to indicate that Flam0 is taken from literature
+* Fnu0 (float): Reference flux in :math:`F_{\nu}` units
+* Fnu0_units (str): units of the reference flux
+* Fnu0_lit (int): flag to indicate that Fnu0 is taken from literature
+* source (str): source for the literature values
+
+Obviously not all of these values need to be defined. If your filter is calibrated in the Vega system, then the AB and ST zeropoints should be set to nan, and the reference wavelengths are derived from the Vega flux. To calculate these values for new filters, see :any:`sed/zeropoint_derivation`.
+
+Pay Attention: The zero points derived in :any:`sed/zeropoint_derivation` are the inverse of the ones that need to be added to the zeropoints file. So if you calculate a VEGA zeropoint of :math:`Zp = 0.02` as described in that section, you need to add :math:`-0.02` for that filter in the vegamag column in the zeropoints.dat file.
+   
+Permanently adding a new filter
+-------------------------------
+
+Add a new response curve file to the ivs/sed/filters directory. The file should contain two columns, the first column is the wavelength in angstrom, the second column is the transmission curve. The units of the later are not important. Afterwards call the update info function
+
+.. code-block:: python
+
+   from ivs.sed import filters
+   filters.update_info()
+
+The contents of the zeropoints.dat file that is located in ivs/sed will automatically be updated. Make sure to add any additional information on the new filters manually in that file (e.g. is t a CCD or bolometer, what are the zeropoint magnitudes etc).
+
+
+Temporarily adding a new filter
+-------------------------------
 
 You can add custom filters on the fly using L{add_custom_filter}. In this
 example we add a weird-looking filter and check the definition of Flambda and
@@ -162,14 +209,3 @@ To reset and use the original definitions again, do
 
    set_prefer_file(True)
 
-Adding filters permanently
---------------------------
-
-Add a new response curve file to the ivs/sed/filters directory. The file should
-contain two columns, the first column is the wavelength in angstrom, the second
-column is the transmission curve. The units of the later are not important.
-
-Then, call L{update_info}. The contents of C{zeropoints.dat} will automatically
-be updated. Make sure to add any additional information on the new filters
-manually in that file (e.g. is t a CCD or bolometer, what are the zeropoint
-magnitudes etc).
