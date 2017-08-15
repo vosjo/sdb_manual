@@ -10,7 +10,9 @@ Welcome to the manual for analysing wide sdB binaries
    :maxdepth: 2
    :caption: Contents:
    
+   gravitational_redshift/gravitational_redshift
    sed/SED
+   mass_determination/mass_determination
 
 
 
