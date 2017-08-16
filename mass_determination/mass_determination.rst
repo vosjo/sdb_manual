@@ -20,13 +20,13 @@ BAGEMASS
 ^^^^^^^^
 A fortran implementation of an MCMC code to determine stellar masses is BAGEMASS from `Maxted et al. 2015 <https://arxiv.org/abs/1412.7891>`_. This is a fast code using the Yale-Potsdam stellar isochrones (`YaPSI <http://www.astro.yale.edu/yapsi/>`_). The downside of this code is that the observables (Teff, R, Fe/H, L) are hardcoded and can't be changed without rewriting fortran code. But if you have these observables it is as easy as plugging in their values and errors and pressing enter.
 
-BAGEMASS can be obtained from sourceforge: `https://sourceforge.net/projects/bagemass/`_
+BAGEMASS can be obtained from sourceforge: https://sourceforge.net/projects/bagemass/
 
 EMCMASS
 ^^^^^^^
-EMCMASS is a python 'port' of the BAGEMASS tool I have written that makes it easier to change the observables and the stellar evolution models. It relies on the `EMCEE <http://dan.iel.fm/emcee/current/>`_ code from `Foreman-Mackey et al. 2013 <https://arxiv.org/abs/1202.3665>`_ for the MCMC part. The standard setup uses Teff, logg and Fe/H as observables together with the MESA isochrones and stellar tracks (`MIST <http://waps.cfa.harvard.edu/MIST/>`_), but all of this can be easily changed. You can even change which model parameters you would like to use, although I can't imagine why you would want to do this. Full documentation on how to use EMCMASS is included with the code.
+EMCMASS is a python 'port' of the BAGEMASS tool I have written that makes it easier to change the observables and the stellar evolution models. It relies on the `EMCEE <http://dan.iel.fm/emcee/current/>`_ code from `Foreman-Mackey et al. 2013 <https://arxiv.org/abs/1202.3665>`_ for the MCMC part. The observables can be any combination of Teff, logg, logL, logR and [M/H]. Both the YaPSI isochrones from BAGEMASS and the MESA isochrones and stellar tracks (`MIST <http://waps.cfa.harvard.edu/MIST/>`_), are included. You can even change which model parameters you would like to use, although I can't imagine why you would want to do this. Full documentation on how to use EMCMASS is included with the code.
 
-EMCEE can be obtained from github: `https://github.com/Alegria01/emcmass`_
+EMCEE can be obtained from github: https://github.com/Alegria01/emcmass
 
 Example using EMCEE
 -------------------
@@ -35,10 +35,15 @@ Say we want to determine the mass of the K-type companion of HE0430-2457 (incide
  * Teff: 4700 :math:`\pm` 500
  * logg: 4.50 :math:`\pm` 0.50
  * Fe/H: -0.35 :math:`\pm` 0.40
+ * logL: -0.55 :math:`\pm` 0.15
  
-EMCEE needs the log of the effective temperature, so this becomes: :math:`\log{T_{\rm eff}} = 3.67 \pm 0.05`. When we use these values as input for the code we get the following figure as output:
+EMCEE needs the log of the effective temperature, so this becomes: :math:`\log{T_{\rm eff}} = 3.67 \pm 0.05`. You can run the *emcmass* script from the command line with the above input as follows:
+
+>>> python emcmass.py -model mist -mass 0.2 2.0 log_L -0.55 0.15 log_Teff 3.67 0.05 log_g 4.50 0.50 M_H -0.35 0.40
+
+This will produce a bunch of text output describing the setup and produce the following graph with the results
 
 .. image:: images/EMCMASS_example.png
    :width: 760px
    
-The mass is well determined at :math:`M_{\rm K} = 0.76 \pm 0.10` and the metalicity of the best fitting model corresponds well with the original metalicity. However, the age can not really be determined. The best we can say is that it is a main sequence star. There is a slightly higher probability that it is a yougher MS star, but it would not be very smart to put much thrust in that.
+The mass is well determined at :math:`M_{\rm K} = 0.76 \pm 0.10` and the metalicity of the best fitting model corresponds well with the original metalicity. However, the age can not really be determined. The best we can say is that it is a main sequence star. There is a slightly higher probability that it is a younger MS star, but it would not be very smart to put much thrust in that.
