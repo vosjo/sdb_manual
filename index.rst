@@ -11,6 +11,7 @@ Welcome to the manual for analysing wide sdB binaries
    :caption: Contents:
    
    gravitational_redshift/gravitational_redshift
+   spectra/spectra
    sed/SED
    mass_determination/mass_determination
 

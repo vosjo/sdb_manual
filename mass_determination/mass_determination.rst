@@ -34,12 +34,12 @@ Example using EMCEE
 Say we want to determine the mass of the K-type companion of HE0430-2457 (incidentily this was the system that the EMCEE code was writen for). Observed properties of this system are: 
  * Teff: 4700 :math:`\pm` 500
  * logg: 4.50 :math:`\pm` 0.50
- * Fe/H: -0.35 :math:`\pm` 0.40
- * logL: -0.55 :math:`\pm` 0.15
+ * Fe/H: -0.42 :math:`\pm` 0.40
+ * logL: -0.58 :math:`\pm` 0.15
  
 EMCEE needs the log of the effective temperature, so this becomes: :math:`\log{T_{\rm eff}} = 3.67 \pm 0.05`. You can run the *emcmass* script from the command line with the above input as follows:
 
->>> python emcmass.py -model mist -mass 0.2 2.0 log_L -0.55 0.15 log_Teff 3.67 0.05 log_g 4.50 0.50 M_H -0.35 0.40
+>>> python emcmass.py -model yapsi -mass 0.2 1.25 -age 7.5 10.3 log_L -0.58 0.15 log_Teff 3.67 0.05 log_g 4.70 0.40 M_H -0.42 0.40
 
 This will produce a bunch of text output describing the setup and produce the following graph with the results
 
