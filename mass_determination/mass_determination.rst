@@ -28,10 +28,10 @@ EMCMASS is a python 'port' of the BAGEMASS tool I have written that makes it eas
 
 EMCEE can be obtained from github: https://github.com/Alegria01/emcmass
 
-Example using EMCEE
--------------------
+Example using EMCMASS
+---------------------
 
-Say we want to determine the mass of the K-type companion of HE0430-2457 (incidentily this was the system that the EMCEE code was writen for). Observed properties of this system are: 
+Say we want to determine the mass of the K-type companion of HE0430-2457 (incidentily this was the system that the EMCMASS code was writen for). Observed properties of this system are: 
  * Teff: 4700 :math:`\pm` 500
  * logg: 4.50 :math:`\pm` 0.50
  * Fe/H: -0.42 :math:`\pm` 0.40

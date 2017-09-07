@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the manual for analysing wide sdB binaries 
-=====================================================
+Analysing wide sdB binaries: the Manual 
+=======================================
 
 .. toctree::
    :maxdepth: 2
