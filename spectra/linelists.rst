@@ -133,7 +133,9 @@ Spectral Feature Identifier or SFI for short is a small python program that lets
 usage::
    
    >>> python sfi.py spectrum [-h] [-bin BINSIZE] [-vrad VRAD] [-teff TEFF] [-logg LOGG]
-
+   
+   Program to interactively identify spectral lines. Author: Joris Vos
+   
    positional arguments:
    spectrum      The filename of the spectrum (ascii, fits)
 
